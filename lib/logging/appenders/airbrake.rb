@@ -1,4 +1,3 @@
-require "forwardable"
 require "airbrake"
 require "logging/appender"
 
@@ -23,6 +22,7 @@ module Logging::Appenders
       super(name, :level => :error)
 
       cfg = ::Airbrake.configuration
+      cfg.framework = "Logging #{Logging.version}"
 
       @options = args.shift || {}
       @options.each do |k,v|

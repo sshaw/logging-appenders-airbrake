@@ -24,8 +24,11 @@ Airbrake appender for [the logging gem](https://github.com/TwP/logging).
 
 ## Description
 
-Only events with the `:error` log level are sent to Airbrake. By default the appender 
-will be named `"airbrake"`. This can be changed by passing a name to the `airbrake` method:
+Only events with the `:error` log level are sent to Airbrake. Errors are not sent asynchronously,
+though this can be changed via `Airbrake.configure`.
+
+By default the appender  will be named `"airbrake"`. This can be changed by passing a name
+to the `airbrake` method:
 
     Logging.appenders.airbrake("another_name", options)
 
