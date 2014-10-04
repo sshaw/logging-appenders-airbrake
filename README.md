@@ -8,7 +8,9 @@ Airbrake appender for [the logging gem](https://github.com/TwP/logging).
     require "logging/appenders/airbrake"
 
 	log = Logging.logger[self]
-	log.appenders = Logging.appenders.airbrake(:api_key => "123XYZ", :ignore => %w[SomeThang AnotherThang])
+	log.add_appenders(
+	  Logging.appenders.airbrake(:api_key => "123XYZ", :ignore => %w[SomeThang AnotherThang])
+    )
 
     # Or
 
@@ -16,7 +18,7 @@ Airbrake appender for [the logging gem](https://github.com/TwP/logging).
       # ...
     end
 
-	log.appenders = Logging.appenders.airbrake
+	log.add_appenders(Logging.appenders.airbrake)
 	
 	log.info  "Not sent to airbrake"
 	log.error "Airbrake here I come!"
