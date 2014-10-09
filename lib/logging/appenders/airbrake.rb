@@ -11,7 +11,6 @@ module Logging::Appenders
   end
 
   class Airbrake < Logging::Appender
-    VERSION = "0.0.1"
     FILTER = lambda do |line|
       line =~ %r{/logging-[^/]+/lib/logging/} ? nil : line
     end

@@ -1,11 +1,10 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "logging/appenders/airbrake"
 
 Gem::Specification.new do |spec|
   spec.name          = "logging-appenders-airbrake"
-  spec.version       = Logging::Appenders::Airbrake::VERSION
+  spec.version       = "0.0.1"
   spec.authors       = ["Skye Shaw"]
   spec.email         = ["skye.shaw@gmail.com"]
   spec.summary       = %q{Airbrake appender for the logging gem}
