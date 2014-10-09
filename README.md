@@ -42,17 +42,11 @@ All Airbrake options can be passed to the latter.
 If you're already using Airbrake then your current Airbrake initializer will be used.
 If not you can either create one or specify your options in `config/logging.rb`.
 
-### Gemfile
-
-	gem "logging-appenders-airbrake"
-
-### `config/logging.rb`
+In `config/logging.rb`:
 
 	Logging.appenders.airbrake if config.log_to.include?("airbrake")
 
-### `config/environments/xxx.rb`
-
-Where `xxx` corresponds to the desired `Rails.env`.
+In `config/environments/xxx.rb`, where `xxx` corresponds to the desired `Rails.env`:
 
 	config.log_to = %w[airbrake]  # or %w[airbrake file email] # etc...
 
