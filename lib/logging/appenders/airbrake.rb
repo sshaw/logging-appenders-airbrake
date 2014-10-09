@@ -12,6 +12,9 @@ module Logging::Appenders
 
   class Airbrake < Logging::Appender
     VERSION = "0.0.1"
+    FILTER = lambda do |line|
+      line =~ %r{/logging-[^/]+/lib/logging/} ? nil : line
+    end
 
     attr :options
 
@@ -25,6 +28,9 @@ module Logging::Appenders
       cfg.framework = "Logging #{Logging.version}"
 
       @options = args.shift || {}
+      @options[:backtrace_filters] ||= []
+      @options[:backtrace_filters] << FILTER
+
       @options.each do |k,v|
         unless ::Airbrake::Configuration::OPTIONS.include?(k)
           raise ArgumentError, "unknown Airbrake configuration option #{k}"
