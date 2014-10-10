@@ -39,7 +39,7 @@ module Logging::Appenders
         if cfg[k].is_a?(Array)
           cfg[k].concat(Array(v))
         else
-          cfg.method("#{k}=")[v]
+          cfg.public_send("#{k}=", v)
         end
       end
     end
