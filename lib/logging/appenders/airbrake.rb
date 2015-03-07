@@ -11,11 +11,19 @@ module Logging::Appenders
   end
 
   class Airbrake < Logging::Appender
-    FILTER = lambda do |line|
+    # Ignore errors logged by an Airbrake sender
+    INTERNAL_BT_FILTER = %r{:in\s+`send_to_airbrake'}
+
+    # Remove calls to this class in the stacktrace sent to Airbrake
+    AIRBRAKE_BT_FILTER = lambda do |line|
       line =~ %r{/logging-[^/]+/lib/logging/} ? nil : line
     end
 
     attr :options
+
+    def self.backtrace_filters
+      @backtrace_filters ||= [INTERNAL_BT_FILTER]
+    end
 
     def initialize(*args)
       args.compact!
@@ -28,7 +36,7 @@ module Logging::Appenders
 
       @options = args.shift || {}
       @options[:backtrace_filters] ||= []
-      @options[:backtrace_filters] << FILTER
+      @options[:backtrace_filters] << AIRBRAKE_BT_FILTER
 
       @options.each do |k,v|
         unless ::Airbrake::Configuration::OPTIONS.include?(k)
@@ -46,7 +54,15 @@ module Logging::Appenders
 
     private
 
+    def ignore_caller?(bt)
+      bt.any? do |line|
+        self.class.backtrace_filters.any? { |filter| line =~ filter }
+      end
+    end
+
     def write(event)
+      return self if ignore_caller?(caller)
+
       if ::Airbrake.configuration.configured?
         # Docs say event can be a String too, not sure when/how but we'll check anyways
         error = event.is_a?(Logging::LogEvent) ? event.data : event

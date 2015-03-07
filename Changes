@@ -1,0 +1,4 @@
+v0.0.2    2015-XX-XX
+--------------------
+Bug fixes:
+* Ignore error/fatal calls from the Airbrake sender
