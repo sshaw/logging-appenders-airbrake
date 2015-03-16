@@ -14,7 +14,7 @@ module Logging::Appenders
     VERSION = "0.0.2"
 
     # Ignore errors logged by an Airbrake sender
-    INTERNAL_BT_FILTER = %r{:in\s+`send_to_airbrake'}
+    INTERNAL_BT_FILTER = %r{:in\s+`send_to_airbrake'}.freeze
 
     # Remove calls to this class in the stacktrace sent to Airbrake
     AIRBRAKE_BT_FILTER = lambda do |line|
@@ -22,32 +22,33 @@ module Logging::Appenders
     end
 
     def initialize(*args)
-      args.compact!
-
-      name = args.first.is_a?(String) ? args.shift : "airbrake"
-      args = args.first.is_a?(Hash)   ? args.shift : {}
-
-      super(name, args.merge(:level => :error))
-
       cfg = ::Airbrake.configuration
       cfg.framework = "Logging #{Logging.version}"
 
-      @options = args.shift || {}
-      @options[:backtrace_filters] ||= []
-      @options[:backtrace_filters] << AIRBRAKE_BT_FILTER
+      appender = { :level => :error }
 
-      @options.each do |k,v|
-        unless ::Airbrake::Configuration::OPTIONS.include?(k)
-          raise ArgumentError, "unknown Airbrake configuration option #{k}"
+      args.compact!
+      name = args.first.is_a?(String) ? args.shift : "airbrake"
+      airbrake = args.last.is_a?(Hash) ? args.pop : {}
+
+      airbrake[:backtrace_filters] ||= []
+      airbrake[:backtrace_filters] << AIRBRAKE_BT_FILTER
+
+      airbrake.keys.each do |name|
+        unless ::Airbrake::Configuration::OPTIONS.include?(name)
+          appender[name] = airbrake.delete(name)
+          next
         end
 
         # Airbrake array attributes have no setter
-        if cfg[k].is_a?(Array)
-          cfg[k].concat(Array(v))
+        if cfg[name].is_a?(Array)
+          cfg[name].concat(Array(airbrake[name]))
         else
-          cfg.public_send("#{k}=", v)
+          cfg.public_send("#{name}=", airbrake[name])
         end
       end
+
+      super(name, appender)
     end
 
     private

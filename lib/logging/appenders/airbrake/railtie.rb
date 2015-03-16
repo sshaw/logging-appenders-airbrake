@@ -1,4 +1,5 @@
 require "rails"
+require "logging/appenders/airbrake"
 
 module Logging
   module Appenders

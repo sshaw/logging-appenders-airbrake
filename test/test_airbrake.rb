@@ -5,7 +5,20 @@ require "minitest/mock"
 require "logging"
 require "logging/appenders/airbrake"
 
+class FailingSender < Airbrake::Sender
+  def send_to_airbrake(notice)
+    logger.error("error!")
+    logger.fatal("fatal!")
+  end
+end
+
 class TestAirbrake < MiniTest::Unit::TestCase
+  CFG = Airbrake.configuration
+
+  def setup
+    Airbrake.configuration = CFG
+  end
+
   def test_configuration_without_appender_name
     app = appender(config)
 
@@ -32,16 +45,12 @@ class TestAirbrake < MiniTest::Unit::TestCase
     end
   end
 
-  def test_invalid_configuration
-    assert_raises(ArgumentError, /unknown/) { appender(:ass => "bass") }
-  end
-
   def test_only_error_level_logged
     count = 0
     app = appender
     app.define_singleton_method(:write) { |e| count += 1 }
 
-    log = Logging.logger[self]
+    log = Logging.logger[__method__]
     log.add_appenders(app)
 
     log.info("Hi")
@@ -53,6 +62,18 @@ class TestAirbrake < MiniTest::Unit::TestCase
     assert_equal 2, count
   end
 
+  def test_errors_from_airbrake_sender_ignored
+    log = Logging.logger[__method__]
+    log.add_appenders(appender)
+
+    Airbrake.configuration.logger = log
+    Airbrake.sender = FailingSender.new
+
+    log.info("info")
+    # If the test fails this will trigger a SystemStackError
+    log.error("some error")
+  end
+
   private
   def config
     @config ||= {
@@ -62,6 +83,7 @@ class TestAirbrake < MiniTest::Unit::TestCase
     }
   end
 
+  # With this the appender is created only once un
   def appender(*args)
     args << { :api_key => "X123" } unless args.last.is_a?(Hash)
     Logging.appenders.airbrake(*args)
