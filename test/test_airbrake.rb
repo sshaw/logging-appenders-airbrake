@@ -83,7 +83,7 @@ class TestAirbrake < MiniTest::Unit::TestCase
     }
   end
 
-  # With this the appender is created only once un
+  # With this the appender is created only once unless there's a name
   def appender(*args)
     args << { :api_key => "X123" } unless args.last.is_a?(Hash)
     Logging.appenders.airbrake(*args)

@@ -1,6 +1,6 @@
 # Logging::Appenders::Airbrake
 
-Airbrake appender for [the logging gem](https://github.com/TwP/logging).
+Airbrake appender for [the Logging gem](https://github.com/TwP/logging).
 
 ## Overview
 
@@ -19,10 +19,10 @@ Airbrake appender for [the logging gem](https://github.com/TwP/logging).
     end
 
 	log.add_appenders(Logging.appenders.airbrake)
-	
+
 	log.info  "Not sent to airbrake"
 	log.error "Airbrake here I come!"
-	log.error SomeError.new("See you @ airbrake.io!")	
+	log.error SomeError.new("See you @ airbrake.io!")
 
 ## Description
 
@@ -34,8 +34,9 @@ to the `airbrake` method:
 
     Logging.appenders.airbrake("another_name", options)
 
-Airbrake configuration can be done via `Airbrake.configure` or via `Logging.appenders.airbrake`. 
-All Airbrake options can be passed to the latter.
+Airbrake configuration can be done via `Airbrake.configure` or via `Logging.appenders.airbrake`.
+All [`Airbrake::Configuration` options](http://www.rubydoc.info/gems/airbrake/Airbrake/Configuration) can be passed
+to the latter.
 
 ## Using With `logging-rails`
 

@@ -6,6 +6,8 @@ module Logging
     class Airbrake
       class Railtie < ::Rails::Railtie
         config.after_initialize do |app|
+          next unless app.middleware.include?(::Airbrake::Rails::Middleware)
+
           log = app.env_config["action_dispatch.logger"]
           next unless log.is_a?(Logging::Logger)
 
