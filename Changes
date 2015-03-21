@@ -1,5 +1,5 @@
-v0.0.2    2015-XX-XX
+v0.0.2    2015-03-21
 --------------------
 Bug fixes:
 * Ignore error/fatal calls from the Airbrake sender
-* Under Rails, prevent exceptions from being logged twice
+* Under Rails, prevent exceptions caught by the Airbrake middleware from being sent twice

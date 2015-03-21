@@ -7,8 +7,8 @@ Gem::Specification.new do |spec|
   spec.version       = "0.0.2"
   spec.authors       = ["Skye Shaw"]
   spec.email         = ["skye.shaw@gmail.com"]
-  spec.summary       = %q{Airbrake appender for the logging gem}
-  spec.description   = %q{An appender for the logging gem that will send all messages logged at the :error level to Airbrake}
+  spec.summary       = %q{Airbrake appender for the Logging gem}
+  spec.description   = %q{An appender for the Logging gem that sends all messages logged at the :error level to Airbrake}
   spec.homepage      = "https://github.com/sshaw/logging-appenders-airbrake"
   spec.license       = "MIT"
 

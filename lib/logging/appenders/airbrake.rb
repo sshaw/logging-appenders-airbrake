@@ -1,5 +1,5 @@
 require "airbrake"
-require "logging/appender"
+require "logging"
 
 module Logging::Appenders
   def self.airbrake(*args)
