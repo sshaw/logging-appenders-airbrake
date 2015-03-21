@@ -1,5 +1,7 @@
 # Logging::Appenders::Airbrake
 
+[![Build Status](https://travis-ci.org/sshaw/logging-appenders-airbrake.svg?branch=master)](https://travis-ci.org/sshaw/logging-appenders-airbrake)
+
 Airbrake appender for [the Logging gem](https://github.com/TwP/logging).
 
 ## Overview
