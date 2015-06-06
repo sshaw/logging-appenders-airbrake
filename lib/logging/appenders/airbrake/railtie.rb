@@ -8,8 +8,9 @@ module Logging
         config.after_initialize do |app|
           next unless defined?(::Airbrake::Rails::Middleware) && app.middleware.include?(::Airbrake::Rails::Middleware)
 
+          # Don't use is_a?, the logger maybe be wrapped in ActiveSupport::TaggedLogging
           log = app.env_config["action_dispatch.logger"]
-          next unless log.is_a?(Logging::Logger)
+          next unless log.respond_to?(:appenders=) && log.respond_to?(:additive=)
 
           # After sending an exception to Airbrake its middleware passes the exception (`raise`es) it up
           # the stack. Rails' middleware (DebugException, ShowExceptions) ends up logging these as fatal,

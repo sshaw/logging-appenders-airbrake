@@ -1,3 +1,8 @@
+v0.0.3    2015-XX-XX
+--------------------
+Bug fixes:
+* Under Rails, fatal Airbrake middleware exception were sent when wrapped by TaggedLogging
+
 v0.0.2    2015-03-21
 --------------------
 Bug fixes:

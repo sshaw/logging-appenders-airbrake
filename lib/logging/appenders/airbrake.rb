@@ -11,7 +11,7 @@ module Logging::Appenders
   end
 
   class Airbrake < Logging::Appender
-    VERSION = "0.0.2"
+    VERSION = "0.0.3"
 
     # Ignore errors logged by an Airbrake sender
     INTERNAL_BT_FILTER = %r{:in\s+`send_to_airbrake'}.freeze
