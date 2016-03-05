@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 require "minitest/autorun"
-require "minitest/mock"
 
 require "logging"
 require "logging/appenders/airbrake"
@@ -25,6 +24,8 @@ class TestAirbrake < MiniTest::Unit::TestCase
     refute_nil Logging.logger["airbrake"]
     assert_same app, Logging.appenders.airbrake
 
+    refute_nil Airbrake.sender
+
     assert_equal config[:api_key], Airbrake.configuration.api_key
     assert_equal config[:host], Airbrake.configuration.host
     config[:ignore].each do |name|
@@ -37,6 +38,8 @@ class TestAirbrake < MiniTest::Unit::TestCase
 
     refute_nil Logging.logger["sshaw"]
     refute_same app, Logging.appenders.airbrake
+
+    refute_nil Airbrake.sender
 
     assert_equal config[:api_key], Airbrake.configuration.api_key
     assert_equal config[:host], Airbrake.configuration.host
@@ -74,7 +77,17 @@ class TestAirbrake < MiniTest::Unit::TestCase
     log.error("some error")
   end
 
+  def test_custom_sender_not_overwritten
+    Airbrake.sender = FailingSender.new
+
+    log = Logging.logger[__method__]
+    log.add_appenders(appender)
+
+    assert_instance_of FailingSender, Airbrake.sender
+  end
+
   private
+
   def config
     @config ||= {
       :api_key => "X123",

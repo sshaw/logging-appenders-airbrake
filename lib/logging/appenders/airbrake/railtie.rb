@@ -12,7 +12,7 @@ module Logging
           log = app.env_config["action_dispatch.logger"]
           next unless log.respond_to?(:appenders=) && log.respond_to?(:additive=)
 
-          # After sending an exception to Airbrake its middleware passes the exception (`raise`es) it up
+          # After sending an exception to Airbrake its middleware passes the exception (`raise`es it) up
           # the stack. Rails' middleware (DebugException, ShowExceptions) ends up logging these as fatal,
           # which triggers the Airbrake appender. To avoid sending the exception twice we remove the appender.
           log.appenders = Logging.logger.root.appenders if log.appenders.none?

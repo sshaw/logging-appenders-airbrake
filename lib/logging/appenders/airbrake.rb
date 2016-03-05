@@ -29,7 +29,7 @@ module Logging::Appenders
 
       args.compact!
       name = args.first.is_a?(String) ? args.shift : "airbrake"
-      airbrake = args.last.is_a?(Hash) ? args.pop : {}
+      airbrake = args.last.is_a?(Hash) ? args.pop.dup : {}
 
       airbrake[:backtrace_filters] ||= []
       airbrake[:backtrace_filters] << AIRBRAKE_BT_FILTER
@@ -47,6 +47,10 @@ module Logging::Appenders
           cfg.public_send("#{name}=", airbrake[name])
         end
       end
+
+      # We need a sender else errors will not be sent to Airbrake.
+      # This will create a sender that may use some of the given config.
+      ::Airbrake.configure(true) {} unless ::Airbrake.sender
 
       super(name, appender)
     end

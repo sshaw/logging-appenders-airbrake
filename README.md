@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/sshaw/logging-appenders-airbrake.svg?branch=master)](https://travis-ci.org/sshaw/logging-appenders-airbrake)
 
-Airbrake appender for [the Logging gem](https://github.com/TwP/logging).
+Airbrake appender for [the Logging gem](https://github.com/TwP/logging). **Airbrake v5 is not supported.**
 
 ## Overview
 
@@ -37,8 +37,12 @@ to the `airbrake` method:
     Logging.appenders.airbrake("another_name", options)
 
 Airbrake configuration can be done via `Airbrake.configure` or via `Logging.appenders.airbrake`.
-All [`Airbrake::Configuration` options](http://www.rubydoc.info/gems/airbrake/Airbrake/Configuration) can be passed
+All [`Airbrake::Configuration` options](http://www.rubydoc.info/gems/airbrake/4.3.0/Airbrake/Configuration) can be passed
 to the latter.
+
+Internally `Airbrake.configure` will be called *only if* `Airbrake.sender` has not been set. This gives
+[some options set by `Airbrake.configure`](http://www.rubydoc.info/gems/airbrake/4.3.0/Airbrake/Sender) precedence over those
+passed into the logger.
 
 ## Using With `logging-rails`
 
