@@ -57,6 +57,10 @@ In `config/environments/xxx.rb`, where `xxx` corresponds to the desired `Rails.e
 
 	config.log_to = %w[airbrake]  # or %w[airbrake file email] # etc...
 
+## See Also
+
+[`Logging::Appenders::Honeybadger`](https://github.com/sshaw/logging-appenders-honeybadger) - Honeybadger appender for the Logging gem
+
 ## Author
 
 Skye Shaw [sshaw AT gmail.com]
